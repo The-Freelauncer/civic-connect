@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Civic Connect</title>
+  <!-- Font Awesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="/static/weblogo.png">
+  <style>
+    html{
+      scroll-behavior: smooth;
+    }
+
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #fff;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: 
+                url('/static/city.jpg') no-repeat center center/cover;
+      height: 95vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .hero-content {
+      max-width: 900px;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+      color: #ff6b00;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: #ff6b00;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #e55d00;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: #0078ff;
+      border: 2px solid #0078ff;
+    }
+
+    .btn-secondary:hover {
+      background: #0078ff;
+      color: #fff;
+    }
+
+    .stats {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat h3 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ff6b00;
+    }
+
+    .stat p {
+      font-size: 0.95rem;
+      margin-top: 5px;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 90px 20px;
+      background: #dbe7ff;
+      text-align: center;
+    }
+
+    .features h2 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      color: #222;
+    }
+
+    .features h2 span {
+      color: #0078ff;
+    }
+
+    .features .subtitle {
+      font-size: 1.15rem;
+      color: #555;
+      max-width: 750px;
+      margin: 0 auto 60px;
+      line-height: 1.6;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 40px 25px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      border: 1px solid #0078ff33;
+    }
+
+    .icon-wrapper {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 1.6rem;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .icon-wrapper.orange {
+      background: linear-gradient(135deg, #ff6b00, #ff944d);
+    }
+
+    .icon-wrapper.blue {
+      background: linear-gradient(135deg, #0078ff, #3db9ff);
+    }
+
+    .icon-wrapper.green {
+      background: linear-gradient(135deg, #2ecc71, #58d68d);
+    }
+
+    .icon-wrapper.purple {
+      background: linear-gradient(135deg, #8e44ad, #c39bd3);
+    }
+
+    .feature-card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .feature-card p {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .cta {
+      margin-top: 50px;
+    }
+
+    .btn-report {
+      background: linear-gradient(135deg, #ff6b00, #ff944d);
+      color: #fff;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-report:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Report. Track. <span>Resolve. Together.</span></h1>
+      <p>Empowering citizens to report civic issues while helping municipalities track and resolve them efficiently for stronger communities.</p>
+      
+      <div class="hero-buttons">
+        <button class="btn btn-primary">📱 Report an Issue</button>
+        <button class="btn btn-secondary">📊 Explore Dashboard</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <h3>5,000+</h3>
+          <p>Issues Resolved</p>
+        </div>
+        <div class="stat">
+          <h3>30%</h3>
+          <p>Faster Response</p>
+        </div>
+        <div class="stat">
+          <h3>50+</h3>
+          <p>Cities Connected</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <h2>Empower Your <span>Community Voice</span></h2>
+      <p class="subtitle">
+        Citizens can easily report civic issues, track progress, and engage with their community 
+        to create positive change in their neighborhoods.
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="icon-wrapper orange">
+            <i class="fas fa-camera"></i>
+          </div>
+          <h3>Report with Photos</h3>
+          <p>Capture issues with your camera and automatically tag location for precise reporting.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon-wrapper blue">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <h3>Real-time Tracking</h3>
+          <p>Track the status of your reports from submission to resolution in real-time.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon-wrapper green">
+            <i class="fas fa-bell"></i>
+          </div>
+          <h3>Progress Notifications</h3>
+          <p>Get notified when your reports are acknowledged, assigned, and resolved.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon-wrapper purple">
+            <i class="fas fa-comments"></i>
+          </div>
+          <h3>Community Engagement</h3>
+          <p>Vote on existing reports and add comments to help prioritize community issues.</p>
+        </div>
+      </div>
+
+      <div class="cta">
+        <button class="btn-report">📱 Start Reporting Issues</button>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- How It Works Section -->
+    <section class="how-it-works" id="secondary">
+    <h2>How It <span>Works</span></h2>
+    <p class="how-subtitle">
+        Our platform creates a seamless connection between citizens and municipalities 
+        for efficient issue resolution.
+    </p>
+    <div class="steps">
+        <div class="step">
+        <div class="step-icon orange" data-step="1"><i class="fas fa-mobile-alt"></i></div>
+        <h3>Citizen Reports Issue</h3>
+        <p>Citizens easily report problems using mobile app with photo and location.</p>
+        </div>
+        <div class="step">
+        <div class="step-icon blue" data-step="2"><i class="fas fa-cogs"></i></div>
+        <h3>Municipality Assigns & Resolves</h3>
+        <p>Issues are automatically routed to departments and assigned to staff.</p>
+        </div>
+        <div class="step">
+        <div class="step-icon green" data-step="3"><i class="fas fa-check-circle"></i></div>
+        <h3>Citizen Gets Notified</h3>
+        <p>Real-time updates keep citizens informed throughout the resolution process.</p>
+        </div>
+    </div>
+    </section>
+
+    <style>
+        /* How It Works Section */
+    .how-it-works {
+    padding: 90px 20px;
+    background: #fdffd9;
+    text-align: center;
+    }
+    .how-it-works h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    }
+    .how-it-works h2 span {
+    color: #ff6b00;
+    }
+    .how-subtitle {
+    font-size: 1.1rem;
+    color: #555;
+    max-width: 700px;
+    margin: 0 auto 60px;
+    }
+    .steps {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 40px;
+    }
+    .step {
+    max-width: 280px;
+    text-align: center;
+    }
+    .step-icon {
+    width: 80px; 
+    height: 80px;
+    border-radius: 50%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: #fff; 
+    font-size: 1.8rem; 
+    position: relative;
+    }
+    .step-icon.orange { background: #ff6b00; }
+    .step-icon.blue { background: #0078ff; }
+    .step-icon.green { background: #2ecc71; }
+    .step-icon::after {
+    content: attr(data-step);
+    position: absolute; 
+    top: -8px; 
+    right: -8px;
+    background: #fff; 
+    color: #0078ff;
+    border: 2px solid #0078ff;
+    width: 28px; 
+    height: 28px; 
+    border-radius: 50%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-size: 0.9rem; 
+    font-weight: bold;
+    }
+    .step h3 { 
+        font-size: 1.2rem; 
+        margin-bottom: 10px; 
+        font-weight: 600; 
+    }
+    .step p { 
+        color: #666; 
+        font-size: 0.95rem; 
+    }
+
+</style>
+
+
+<!-- Smart Technology Section -->
+<section class="ai-section" id="AI">
+  <div class="ai-badge">⚡ AI-Powered Intelligence</div>
+  <h2 class="ai-title">Smart Technology for <span>Smarter Cities</span></h2>
+  <p class="ai-subtitle">
+    Our platform harnesses the power of artificial intelligence to revolutionize how civic
+    issues are reported, prioritized, and resolved in your community.
+  </p>
+
+  <div class="ai-features">
+    <div class="ai-card">
+      <div class="ai-icon">🎯</div>
+      <h3>Smart Classification</h3>
+      <p>AI automatically categorizes and prioritizes issues based on urgency, location, and impact.</p>
+    </div>
+    <div class="ai-card">
+      <div class="ai-icon">⚡</div>
+      <h3>Instant Routing</h3>
+      <p>Machine learning routes reports to the right department in seconds, not days.</p>
+    </div>
+    <div class="ai-card">
+      <div class="ai-icon">📊</div>
+      <h3>Predictive Analytics</h3>
+      <p>Forecast maintenance needs and prevent issues before they become problems.</p>
+    </div>
+    <div class="ai-card">
+      <div class="ai-icon">🧠</div>
+      <h3>Smart Insights</h3>
+      <p>AI-generated reports help municipal teams make data-driven decisions.</p>
+    </div>
+  </div>
+
+  <div class="ai-stats">
+    <div class="stat">
+      <h3>85%</h3>
+      <p>Accuracy in Issue Classification</p>
+    </div>
+    <div class="stat">
+      <h3>80%</h3>
+      <p>Reduction in Response Time</p>
+    </div>
+    <div class="stat">
+      <h3>60%</h3>
+      <p>Improvement in Resource Allocation</p>
+    </div>
+  </div>
+
+  <div class="ai-btn">
+    <a href="#">⚡ Discover AI Features</a>
+  </div>
+</section>
+
+<!-- CSS -->
+<style>
+.ai-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #ffe6df;
+}
+
+.ai-badge {
+  display: inline-block;
+  background: #aedfff;
+  color: #0369a1;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.ai-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.ai-title span {
+  color: #2563eb;
+}
+
+.ai-subtitle {
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+.ai-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.ai-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.ai-card:hover {
+  transform: translateY(-5px);
+}
+
+.ai-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.ai-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.ai-card p {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.ai-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.stat h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.stat:nth-child(1) h3 { color: #2563eb; }
+.stat:nth-child(2) h3 { color: #f97316; }
+.stat:nth-child(3) h3 { color: #10b981; }
+
+.stat p {
+  color: #6b7280;
+}
+
+.ai-btn a {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.ai-btn a:hover {
+  background: #1d4ed8;
+}
+</style>
+
+
+
+
+
+<!-- Tracking Page -->
+
+<section class="tracking-section">
+        <div class="background-pattern"></div>
+        <div class="container">
+            <div class="tracking-header">
+                <div class="tracking-badge">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span>Real-Time Tracking</span>
+                    <div class="pulse-dot"></div>
+                </div>
+                <h2>Track Every Issue from <span class="highlight">Report to Resolution</span></h2>
+                <p class="subtitle">
+                    Stay informed every step of the way with our comprehensive tracking system. 
+                    Monitor progress, receive updates, and see real results in your community.
+                </p>
+                <div class="cta-container">
+                    <a href="/tracker" class="tracking-btn primary">
+                        <i class="fas fa-search"></i>
+                        <span>Track Your Report</span>
+                        <div class="btn-shine"></div>
+                    </a>
+                    <a href="/realtime" class="tracking-btn secondary">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Real-Time Map Tracking</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="features-container">
+                <div class="features-grid">
+                    <div class="feature-card" data-feature="location">
+                        <div class="card-glow"></div>
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="icon-pulse"></div>
+                        </div>
+                        <h3>Live Location Updates</h3>
+                        <p>See exactly where your reported issue is located and track field team movements in real-time with GPS precision.</p>
+                        <div class="feature-status">
+                            <div class="status-indicator active"></div>
+                            <span>Active Tracking</span>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" data-feature="timeline">
+                        <div class="card-glow"></div>
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                            <div class="progress-ring">
+                                <div class="progress-circle"></div>
+                            </div>
+                        </div>
+                        <h3>Progress Timeline</h3>
+                        <p>Follow each stage from initial report through assignment, work in progress, to completion with detailed timestamps.</p>
+                        <div class="mini-timeline">
+                            <div class="timeline-step completed"></div>
+                            <div class="timeline-step active"></div>
+                            <div class="timeline-step pending"></div>
+                        </div>
+                    </div>
+
+                    <div class="feature-card" data-feature="notification">
+                        <div class="card-glow"></div>
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                            <div class="notification-dots">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                        </div>
+                        <h3>Smart Notifications</h3>
+                        <p>Get instant alerts via SMS, email, or push notifications when status changes, with customizable frequency settings.</p>
+                        <div class="notification-preview">
+                            <div class="notification-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Issue resolved!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="1247">0</div>
+                        <div class="stat-label">Issues Tracked</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="94">0</div>
+                        <div class="stat-label">Resolution Rate %</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="2.4">0</div>
+                        <div class="stat-label">Avg Response Days</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="99.8">0</div>
+                        <div class="stat-label">System Uptime %</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .tracking-section {
+            position: relative;
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .background-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            animation: patternFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes patternFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tracking-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .tracking-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgb(255, 255, 255);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 24px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .tracking-section h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin: 0 0 24px 0;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            line-height: 1.1;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: rgba(255, 0, 0, 0.9);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto 40px auto;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tracking-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .tracking-btn.primary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255,107,107,0.4);
+        }
+
+        .tracking-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .btn-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tracking-btn:hover .btn-shine {
+            left: 100%;
+        }
+
+        .tracking-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255,107,107,0.5);
+        }
+
+        .features-container {
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            position: relative;
+            background: rgb(255, 255, 255);
+            backdrop-filter: blur(20px);
+            color: #ff73dc98;
+            border: 1px solid rgba(253, 118, 118, 0.2);
+            padding: 40px 32px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .card-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,107,107,0.1), rgba(238,90,36,0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .feature-card:hover .card-glow {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px auto;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: rgb(47, 255, 0);
+            overflow: hidden;
+        }
+
+        .icon-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            animation: iconPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
+            0% { transform: scale(1); opacity: 1; }
+            70% { transform: scale(1.4); opacity: 0; }
+            100% { transform: scale(1.4); opacity: 0; }
+        }
+
+        .progress-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .progress-circle {
+            width: 100%;
+            height: 100%;
+            border: 3px solid rgba(255,255,255,0.2);
+            border-top-color: #00ff88;
+            border-radius: 50%;
+            animation: rotate 2s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification-dots {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: dotBlink 1.5s ease-in-out infinite;
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.5s; }
+        .dot:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes dotBlink {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: rgb(255, 103, 232);
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            color: rgba(227, 53, 53, 0.953);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .feature-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff88;
+        }
+
+        .mini-timeline {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .timeline-step {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .timeline-step.completed {
+            background: #00ff88;
+        }
+
+        .timeline-step.active {
+            background: #feca57;
+            box-shadow: 0 0 12px rgba(254,202,87,0.6);
+        }
+
+        .notification-preview {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-top: 16px;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: white;
+        }
+
+        .notification-item i {
+            color: #00ff88;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            text-align: center;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 24px 16px;
+            border-radius: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .tracking-section {
+                padding: 60px 16px;
+            }
+            
+            .cta-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tracking-btn {
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+
+    <script>
+        // Animate numbers on scroll
+        function animateValue(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const current = progress * (end - start) + start;
+                
+                if (element.dataset.target.includes('.')) {
+                    element.innerHTML = current.toFixed(1);
+                } else {
+                    element.innerHTML = Math.floor(current);
+                }
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const target = parseFloat(stat.dataset.target);
+                        animateValue(stat, 0, target, 2000);
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Start observing when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const statsRow = document.querySelector('.stats-row');
+            if (statsRow) {
+                observer.observe(statsRow);
+            }
+
+            // Add stagger animation to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach((card, index) => {
+                card.style.animationDelay = `${0.5 + index * 0.2}s`;
+                card.style.animation = 'fadeInUp 0.8s ease-out both';
+            });
+        });
+
+        // Add hover sound effect simulation
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+
+
+
+<section class="join-movement">
+  <div class="join-header">
+    <h2>Join the Movement</h2>
+    <h3>Make Your City Smarter</h3>
+    <p>
+      Transform how your community handles civic issues. Better reporting, faster resolution,
+      stronger neighborhoods.
+    </p>
+  </div>
+
+  <div class="join-cards">
+    <!-- Citizens Card -->
+    <div class="card">
+      <div class="icon orange">📱</div>
+      <h4>For Citizens</h4>
+      <p>
+        Report issues on-the-go and track progress seamlessly with our web portal.
+      </p>
+      <div class="card-buttons">
+        <a href="/login" class="btn-small">🌐 Try Web Portal</a>
+      </div>
+    </div>
+
+    <!-- Municipalities Card -->
+    <div class="card">
+      <div class="icon green">👥</div>
+      <h4>For Municipalities</h4>
+      <p>
+        Comprehensive dashboard for managing civic issues and improving response times.
+      </p>
+      <div class="card-buttons">
+        <a href="/login" class="btn-small">⚙️ Admin Portal</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<style>
+   .join-movement {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, #567273 , #86ff96 );
+  color: white;
+}
+
+.join-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.join-header h3 {
+  font-size: 1.5rem;
+  color: #ff7f32;
+  margin-bottom: 20px;
+}
+
+.join-header p {
+  font-size: 1rem;
+  max-width: 650px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+.join-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 350px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+.card .icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.icon.orange {
+  color: #ff7f32;
+}
+
+.icon.green {
+  color: #25d366;
+}
+
+.card h4 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.card p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.card-buttons .btn-small {
+  padding: 10px 20px;
+  background: white;
+  color: #0e80d8;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+  display: inline-block;
+}
+
+.card-buttons .btn-small:hover {
+  background: #ff7f32;
+  color: white;
+}
+
+</style>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <!-- Logo / Branding -->
+    <div class="footer-brand">
+      <img src="/static/logo.png" alt="Civic Connect Logo" style="width: 120px; margin-bottom: 10px;">
+      <h2>Civic Connect</h2>
+      <p>Empowering citizens and municipalities for a smarter future.</p>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-links">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Social Links -->
+    <div class="footer-social">
+      <h4>Follow Us</h4>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="footer-bottom">
+    <p>Made with ❤ by Team Cyber Sentinels</p>
+  </div>
+</footer>
+
+<style>
+    .site-footer {
+  background: #0b0f19;
+  color: #ddd;
+  padding: 60px 20px 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
+  gap: 40px;
+}
+
+.footer-brand h2 {
+  color: #fff;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.footer-brand p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.footer-links h4,
+.footer-social h4 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links ul li {
+  margin-bottom: 8px;
+}
+
+.footer-links ul li a {
+  color: #ddd;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+
+.footer-links ul li a:hover {
+  color: #ff7f32;
+}
+
+.footer-social .social-icons a {
+  display: inline-block;
+  color: #ddd;
+  font-size: 1.2rem;
+  margin-right: 12px;
+  transition: color 0.3s;
+}
+
+.footer-social .social-icons a:hover {
+  color: #ff7f32;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom p {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.footer-bottom p span {
+  color: #ff4d6d;
+  font-weight: bold;
+}
+
+</style>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const reportButton = document.querySelector('.btn-report');
+    reportButton.addEventListener('click', function() {
+        window.location.href = '/login';
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const reportButton = document.querySelector('.btn-primary');
+    reportButton.addEventListener('click', function() {
+        window.location.href = '/login';
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const reportButton = document.querySelector('.btn-secondary');
+    reportButton.addEventListener('click', function() {
+        window.location.href = '#AI';
+    });
+  });
+</script>
+
+</body>
+</html>

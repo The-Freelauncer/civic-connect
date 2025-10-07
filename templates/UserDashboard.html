@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Civic Connect | User Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="/static/weblogo.png">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #1a1a1a;
+    }
+    
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    /* Header */
+    .header {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 20px 30px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo-section h1 {
+      font-size: 1.8em;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff8437, #ff2727);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .back-to-feed-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.9em;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    
+    .back-to-feed-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+    }
+    
+    .user-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+    }
+    
+    .welcome-text {
+      text-align: right;
+    }
+    
+    .welcome-text h3 {
+      font-size: 1.1em;
+      color: #374151;
+    }
+    
+    .welcome-text p {
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+    
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3em;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .user-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+    }
+    
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .dropdown-menu {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      padding: 10px 0;
+      min-width: 150px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+      z-index: 10000;
+    }
+    
+    .dropdown-menu.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .dropdown-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #dc2626;
+      font-weight: 500;
+    }
+    
+    .dropdown-item:hover {
+      background: #fee2e2;
+    }
+    
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+    
+    .stat-icon {
+      font-size: 2.5em;
+      margin-bottom: 15px;
+    }
+    
+    .stat-card:nth-child(1) .stat-icon { color: #667eea; }
+    .stat-card:nth-child(2) .stat-icon { color: #f59e0b; }
+    .stat-card:nth-child(3) .stat-icon { color: #3b82f6; }
+    .stat-card:nth-child(4) .stat-icon { color: #10b981; }
+    
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: 700;
+      margin: 10px 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .stat-label {
+      font-weight: 500;
+      color: #6b7280;
+    }
+    
+    /* Toggle Buttons */
+    .toggle-section {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    
+    .toggle-buttons {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 50px;
+      padding: 8px;
+      display: flex;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    .toggle-btn {
+      background: none;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      color: #6b7280;
+    }
+    
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 5px 20px rgba(102,126,234,0.3);
+    }
+    
+    /* Main Content Sections */
+    .content-section {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    
+    .section-title {
+      font-size: 1.8em;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: #374151;
+    }
+    
+    /* Form Styling */
+    .form-grid {
+      display: grid;
+      gap: 20px;
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .form-label {
+      font-weight: 600;
+      color: #374151;
+    }
+    
+    input, select, textarea {
+      padding: 15px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+      background: white;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    }
+    
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .file-upload {
+      border: 2px dashed #cbd5e1;
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .file-upload:hover {
+      border-color: #667eea;
+      background: #f8fafc;
+    }
+    
+    .file-upload-icon {
+      font-size: 3em;
+      color: #cbd5e1;
+      margin-bottom: 15px;
+    }
+    
+    .uploaded-files {
+      margin-top: 15px;
+    }
+    
+    .file-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f1f5f9;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+    
+    .file-remove {
+      color: #dc2626;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+      justify-self: start;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+    }
+    
+    /* Reports List */
+    .reports-grid {
+      display: grid;
+      gap: 20px;
+    }
+    
+    .report-card {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border-left: 4px solid #667eea;
+    }
+    
+    .report-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+    }
+    
+    .report-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .report-title {
+      font-weight: 700;
+      font-size: 1.2em;
+      color: #374151;
+    }
+    
+    .report-location {
+      color: #6b7280;
+      font-size: 0.95em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .report-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    
+    .status-resolved {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .status-in_progress {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .report-description {
+      margin: 15px 0;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+    
+    .report-images {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+    
+    .report-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .report-image:hover {
+      transform: scale(1.1);
+    }
+    
+    .report-date {
+      color: #9ca3af;
+      font-size: 0.85em;
+      margin-top: 10px;
+    }
+    
+    /* Popup */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    
+    .popup-overlay.active {
+      display: flex;
+    }
+    
+    .popup-card {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 500px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    .popup-icon {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+    
+    .popup-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 10px 5px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .dashboard-container { padding: 15px; }
+      .header { flex-direction: column; gap: 15px; text-align: center; }
+      .user-section { order: -1; }
+      .stats-grid { grid-template-columns: 1fr; gap: 15px; }
+      .form-row { grid-template-columns: 1fr; }
+      .toggle-buttons { width: 100%; justify-content: space-around; }
+      .content-section { padding: 20px; }
+      .report-header { flex-direction: column; align-items: stretch; }
+      .dropdown-menu { right: auto; left: 0; }
+    }
+    
+    @media (max-width: 480px) {
+      .header { padding: 15px 20px; }
+      .logo-section h1 { font-size: 1.5em; }
+      .stat-card { padding: 20px; }
+      .stat-number { font-size: 2em; }
+      .toggle-btn { padding: 10px 16px; font-size: 0.9em; }
+    }
+    
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo-section">
+        <i class="fas fa-shield-alt" style="font-size: 1.5em; color: #667eea;"></i>
+        <h1>Civic Connect</h1>
+      </div>
+      
+      <a href="/feed" class="back-to-feed-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to feed
+      </a>
+      
+      <div class="user-section">
+        <div class="welcome-text">
+          <h3>Welcome, <span id="user-name">User</span></h3>
+          <p id="user-email">Loading...</p>
+        </div>
+        <div class="user-avatar" id="user-avatar" onclick="toggleDropdown()">
+          U
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <div class="dropdown-item" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div class="stat-number" id="total-reports">0</div>
+        <div class="stat-label">Total Reports</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+        <div class="stat-number" id="pending-reports">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-cog"></i></div>
+        <div class="stat-number" id="in-progress-reports">0</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-number" id="resolved-reports">0</div>
+        <div class="stat-label">Resolved</div>
+      </div>
+    </div>
+
+    <!-- Toggle Section -->
+    <div class="toggle-section">
+      <div class="toggle-buttons">
+        <button class="toggle-btn active" onclick="showSection('reports')">
+          <i class="fas fa-list"></i> Your Reports
+        </button>
+        <button class="toggle-btn" onclick="showSection('submit')">
+          <i class="fas fa-plus"></i> Submit New Report
+        </button>
+      </div>
+    </div>
+
+    <!-- Your Reports Section -->
+    <div class="content-section" id="reportsSection">
+      <h2 class="section-title">Your Reports</h2>
+      <div class="reports-grid" id="report-list">
+        <p style="text-align: center; color: #6b7280; padding: 40px;">No reports found</p>
+      </div>
+    </div>
+
+    <!-- Submit Report Section -->
+    <div class="content-section hidden" id="submitSection">
+      <h2 class="section-title">Submit New Report</h2>
+      <form id="reportForm" class="form-grid">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" id="name" readonly>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="email" readonly>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Issue Location</label>
+            <input type="text" id="location" placeholder="Enter the location of the issue" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="category" required>
+              <option value="">Select category</option>
+              <option value="Road & Infrastructure">🛣️ Road & Infrastructure</option>
+              <option value="Street Lighting">💡 Street Lighting</option>
+              <option value="Waste Management">🗑️ Waste Management</option>
+              <option value="Water Supply">💧 Water Supply</option>
+              <option value="Public Safety">🚨 Public Safety</option>
+              <option value="Other">📝 Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Issue Description</label>
+          <textarea id="description" placeholder="Please provide detailed description of the civic issue..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Upload Photos (Max 5)</label>
+          <div class="file-upload" id="fileUploadArea">
+            <div class="file-upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <p><strong>Drop photos here or click to select</strong></p>
+            <p style="color: #6b7280; margin-top: 5px;">Supported formats: JPG, PNG, GIF (Max 10MB each)</p>
+            <input type="file" id="fileInput" multiple accept="image/*" style="display:none;">
+          </div>
+          <div class="uploaded-files" id="uploadedFiles"></div>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <i class="fas fa-paper-plane"></i> Submit Report
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Clean Image Popup -->
+  <div class="popup-overlay" id="cleanImagePopup">
+    <div class="popup-card">
+      <div class="popup-icon" style="color:#f59e0b;"><i class="fas fa-exclamation-triangle"></i></div>
+      <h3>Image Quality Alert</h3>
+      <p>The uploaded image appears to be clean. Please upload images that clearly show the civic issue for better processing.</p>
+      <button class="popup-btn" onclick="closeCleanImagePopup()">Understood</button>
+    </div>
+  </div>
+
+  <!-- Acknowledgement Popup -->
+  <div class="popup-overlay" id="ackPopup">
+    <div class="popup-card">
+      <div class="popup-icon" style="color:#10b981;"><i class="fas fa-check-circle"></i></div>
+      <h3>Report Submitted Successfully!</h3>
+      <p>Thank you for taking the time to submit your report.</p>
+      <p><strong>Your reference ID:</strong></p>
+      <div id="ackReportId" style="background:#f1f5f9; padding:12px; border-radius:8px; margin:15px 0; font-weight:bold; font-family:monospace;">Loading...</div>
+      <button class="popup-btn" onclick="copyReportId()">Copy ID</button>
+      <button class="popup-btn" onclick="closeAckPopup()">Go Back to Dashboard</button>
+    </div>
+  </div>
+
+  <script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+  const supabaseUrl = 'https://tpcpjxiafgptviandelc.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwY3BqeGlhZmdwdHZpYW5kZWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNjk4NDcsImV4cCI6MjA3Mjc0NTg0N30.TYcP-D68eufxqnNgjsdMpkt0xoekP-whJZ9mkDgLAdM';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const reportList = document.getElementById('report-list');
+  const fileInput = document.getElementById('fileInput');
+  const fileUploadArea = document.getElementById('fileUploadArea');
+  const uploadedFilesContainer = document.getElementById('uploadedFiles');
+  let selectedFiles = [];
+  let reportImages = {};
+
+  // 🔹 Ensure logout button stays above all elements
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.style.position = 'relative';
+    logoutBtn.style.zIndex = '9999';
+  }
+
+  // Global functions
+  window.toggleDropdown = function () {
+    const dropdown = document.getElementById('dropdownMenu');
+    dropdown.classList.toggle('active');
+  };
+
+  window.logout = async function () {
+    try {
+      await supabase.auth.signOut();
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error logging out:', error);
+      window.location.href = '/login';
+    }
+  };
+
+  window.showSection = function (section) {
+    const reportsSection = document.getElementById('reportsSection');
+    const submitSection = document.getElementById('submitSection');
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+
+    toggleBtns.forEach((btn) => btn.classList.remove('active'));
+
+    if (section === 'reports') {
+      reportsSection.classList.remove('hidden');
+      submitSection.classList.add('hidden');
+      toggleBtns[0].classList.add('active');
+    } else {
+      reportsSection.classList.add('hidden');
+      submitSection.classList.remove('hidden');
+      toggleBtns[1].classList.add('active');
+    }
+  };
+
+  window.closeCleanImagePopup = function () {
+    document.getElementById('cleanImagePopup').classList.remove('active');
+  };
+
+  window.showAckPopup = function (reportId) {
+    document.getElementById('ackReportId').textContent = reportId;
+    document.getElementById('ackPopup').classList.add('active');
+  };
+
+  window.copyReportId = function () {
+    const id = document.getElementById('ackReportId').textContent;
+    navigator.clipboard.writeText(id).then(() => {
+      alert('Reference ID copied to clipboard!');
+    });
+  };
+
+  window.closeAckPopup = function () {
+    document.getElementById('ackPopup').classList.remove('active');
+    showSection('reports');
+  };
+
+  // File upload
+  fileUploadArea.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('click', () => { fileInput.value = null; });
+  fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+
+  fileUploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileUploadArea.style.background = '#f8fafc';
+    fileUploadArea.style.borderColor = '#667eea';
+  });
+
+  fileUploadArea.addEventListener('dragleave', () => {
+    fileUploadArea.style.background = '';
+    fileUploadArea.style.borderColor = '#cbd5e1';
+  });
+
+  fileUploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileUploadArea.style.background = '';
+    fileUploadArea.style.borderColor = '#cbd5e1';
+    handleFiles(e.dataTransfer.files);
+  });
+
+  function handleFiles(files) {
+    for (let file of files) {
+      if (selectedFiles.length >= 5) {
+        alert('Maximum 5 files allowed');
+        break;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        alert(`File "${file.name}" is too large.`);
+        continue;
+      }
+      if (!file.type.startsWith('image/')) {
+        alert(`"${file.name}" is not an image`);
+        continue;
+      }
+      selectedFiles.push(file);
+    }
+    renderFiles();
+  }
+
+  function renderFiles() {
+    uploadedFilesContainer.innerHTML = '';
+    selectedFiles.forEach((file, index) => {
+      const item = document.createElement('div');
+      item.classList.add('file-item');
+      item.innerHTML = `
+        <span>
+          <i class="fas fa-image" style="margin-right: 8px; color: #667eea;"></i>${file.name}
+        </span>
+        <span class="file-remove" data-index="${index}">
+          <i class="fas fa-times"></i>
+        </span>
+      `;
+      uploadedFilesContainer.appendChild(item);
+    });
+  }
+
+  uploadedFilesContainer.addEventListener('click', (e) => {
+    if (e.target.classList.contains('file-remove') || e.target.closest('.file-remove')) {
+      const index = e.target.closest('.file-remove').dataset.index;
+      selectedFiles.splice(index, 1);
+      renderFiles();
+    }
+  });
+
+  async function predict(file) {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const response = await fetch('/predict', { method: 'POST', body: formData });
+      if (!response.ok) return 'error';
+      const result = await response.json();
+      return result.class;
+    } catch (error) {
+      console.error('Prediction error:', error);
+      return 'error';
+    }
+  }
+
+  async function loadDashboard() {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        window.location.href = '/login';
+        return;
+      }
+
+      const user = session.user;
+      if (!user) return;
+
+      document.getElementById('user-email').textContent = user.email;
+      const fullName = user.user_metadata?.full_name || user.email.split('@')[0];
+      document.getElementById('user-name').textContent = fullName;
+      document.getElementById('name').value = fullName;
+      document.getElementById('email').value = user.email;
+
+      if (user.user_metadata?.avatar_url) {
+        document.getElementById('user-avatar').innerHTML = `<img src="${user.user_metadata.avatar_url}" alt="Avatar">`;
+      } else {
+        document.getElementById('user-avatar').textContent = fullName.charAt(0).toUpperCase();
+      }
+
+      const { data: reports, error: reportsError } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (reportsError) {
+        console.error('Error loading reports:', reportsError);
+        reportList.innerHTML =
+          '<p style="text-align: center; color: #ef4444; padding: 40px;">Error loading reports. Please refresh.</p>';
+        return;
+      }
+
+      for (const report of reports) {
+        const { data: images } = await supabase
+          .from('report_images')
+          .select('*')
+          .eq('report_id', report.id);
+        if (images) reportImages[report.id] = images;
+      }
+
+      updateStats(reports);
+      renderReports(reports);
+    } catch (error) {
+      console.error('Error loading dashboard:', error);
+    }
+  }
+
+  function updateStats(reports) {
+    document.getElementById('total-reports').textContent = reports.length;
+    document.getElementById('pending-reports').textContent = reports.filter((r) => r.status === 'pending').length;
+    document.getElementById('resolved-reports').textContent = reports.filter((r) => r.status === 'resolved').length;
+    document.getElementById('in-progress-reports').textContent = reports.filter((r) => r.status === 'in_progress').length;
+  }
+
+  function renderReports(reports) {
+    if (reports.length === 0) {
+      reportList.innerHTML =
+        '<p style="text-align: center; color: #6b7280; padding: 40px;">No reports submitted yet. Click "Submit New Report".</p>';
+      return;
+    }
+
+    reportList.innerHTML = reports
+      .map((report) => {
+        const images = reportImages[report.id] || [];
+        const imageHtml =
+          images.length > 0
+            ? `
+          <div class="report-images">
+            ${images
+              .slice(0, 3)
+              .map(
+                (img) =>
+                  `<img src="${img.image_url}" alt="Report Image" class="report-image" onclick="openImageModal('${img.image_url}')">`,
+              )
+              .join('')}
+            ${images.length > 3 ? `<div style="color: #6b7280; font-size: 0.9em;">+${images.length - 3} more</div>` : ''}
+          </div>
+        `
+            : '';
+
+        const date = new Date(report.created_at).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+
+        return `
+          <div class="report-card">
+            <div class="report-header">
+              <div>
+                <div class="report-title">${report.category}</div>
+                <div class="report-location"><i class="fas fa-map-marker-alt"></i> ${report.location}</div>
+              </div>
+              <span class="report-status status-${report.status}">${report.status.replace('_', ' ')}</span>
+            </div>
+            <div class="report-description">${report.description}</div>
+            ${imageHtml}
+            <div class="report-date"><i class="fas fa-calendar-alt"></i> Submitted on ${date}</div>
+          </div>
+        `;
+      })
+      .join('');
+  }
+
+  window.openImageModal = function (imageUrl) {
+    const modal = document.createElement('div');
+    modal.className = 'popup-overlay active';
+    modal.innerHTML = `
+      <div class="popup-card" style="max-width: 90vw; max-height: 90vh;">
+        <img src="${imageUrl}" alt="Report Image" style="max-width: 100%; max-height: 70vh; border-radius: 10px;">
+        <button class="popup-btn" onclick="this.closest('.popup-overlay').remove()" style="margin-top: 20px;">Close</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  };
+
+  // Form submission
+  document.getElementById('reportForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const submitBtn = e.target.querySelector('.submit-btn');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+    submitBtn.disabled = true;
+
+    try {
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
+      console.log('[auth] user:', user, 'err:', userErr);
+      if (userErr || !user) throw new Error(userErr?.message || 'Not authenticated');
+
+      for (const f of selectedFiles) {
+        const cls = await predict(f);
+        console.log('[predict] file:', f.name, 'class:', cls);
+        if (cls === 'clean') {
+          document.getElementById('cleanImagePopup').classList.add('active');
+    
+          // Stop the form submission entirely
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+          return; // exit the submit handler
+          
+        }
+      }
+
+      const reportData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        location: document.getElementById('location').value,
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value,
+        status: 'pending',
+        user_id: user.id,
+        created_at: new Date().toISOString(),
+      };
+
+      const { data: report, error: reportError, status: reportStatus } =
+        await supabase.from('reports').insert(reportData).select('*').single();
+      console.log('[db] reports insert:', { report, reportError, reportStatus });
+      if (reportError) throw Object.assign(new Error(reportError.message), { meta: reportError });
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            const { latitude, longitude } = pos.coords;
+            try {
+              const { error: locError, status: locStatus } = await supabase
+                .from('report_locations')
+                .insert(
+                  {
+                    report_id: report.id,
+                    user_id: user.id,
+                    latitude,
+                    longitude,
+                    created_at: new Date().toISOString(),
+                  },
+                  { returning: 'minimal' },
+                );
+              if (locError) console.error('Error saving location:', locError, 'status:', locStatus);
+            } catch (locError) {
+              console.error('Exception saving location:', locError);
+            }
+          },
+          (err) => {
+            console.warn('Geolocation error:', err?.code, err?.message);
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+        );
+      }
+
+      // 🔹 Loop through files
+for (const file of selectedFiles) {
+  try {
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const path = `${user.id}/reports/${report.id}/${Date.now()}_${safeName}`;
+
+    const { data: uploadData, error: uploadError } = await supabase
+      .storage
+      .from('report-images')
+      .upload(path, file, { upsert: true });
+
+    if (uploadError) {
+      console.error('[upload] error', uploadError);
+      continue;
+    }
+
+    const objectPath = uploadData?.path ?? path;
+
+    // 🔹 Always get permanent public URL (bucket is public)
+    const { data: publicUrlData } = supabase
+      .storage
+      .from('report-images')
+      .getPublicUrl(objectPath);
+
+    const imageUrl = publicUrlData?.publicUrl;
+    console.log('[publicUrl] resp', { objectPath, imageUrl });
+
+    if (!imageUrl || typeof imageUrl !== 'string' || imageUrl.length === 0) {
+      console.error('No usable image URL for:', objectPath);
+      continue; // Skip this file if no URL
+    }
+
+    // 🔹 Prepare payload for DB insert
+    const payload = {
+      report_id: report.id,
+      user_id: user.id,
+      image_url: imageUrl,
+      uploaded_at: new Date().toISOString(),
+    };
+
+    console.log('[db] inserting into report_images with payload:', payload);
+
+    // 🔹 Save into report_images table
+    const { error: imgErr, status: imgStatus } = await supabase
+      .from('report_images')
+      .insert(payload, { returning: 'minimal' });
+
+    if (imgErr) {
+      console.error('[db] report_images insert error', { imgErr, imgStatus, payload });
+    } else {
+      console.log('[db] report_images insert success', { imgStatus, payload });
+    }
+  } catch (err) {
+    console.error('[image pipeline] exception:', err);
+  }
+} // 🔹 <-- this closes the for-loop
+
+// ✅ These should run AFTER all files are uploaded
+showAckPopup(report.id);
+
+document.getElementById('reportForm').reset();
+selectedFiles = [];
+renderFiles();
+await loadDashboard();
+} catch (err) {
+    console.error('[submit] error object:', err);
+    alert(err?.message || 'Error submitting report');
+  } finally {
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
+  }
+});
+
+  // Initial load
+  loadDashboard();
+
+</script>
+
+
+</body>
+</html>

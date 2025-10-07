@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login | Civic Connect</title>
+  <link rel="icon" href="/static/weblogo.png" />
+  <style>
+    /* Responsive and improved styles */
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('/static/login.jpg') no-repeat center center/cover;
+      padding: 1rem;
+    }
+    
+    .overlay { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: rgba(0,0,0,0.2); /* Brighter background - reduced opacity */
+    }
+    
+    .login-card {
+      position: relative; 
+      z-index: 1;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.25);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      width: 100%; 
+      max-width: 420px; 
+      color: #fff;
+    }
+    
+    h2 { 
+      text-align: center; 
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+    
+    /* Login Type Toggle - Updated with Orange Color */
+    .login-toggle {
+      display: flex;
+      background: rgba(255, 166, 0, 0.852); /* Orange background */
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 165, 0, 0.5); /* Orange border */
+    }
+    
+    .toggle-btn {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .toggle-btn.active {
+      background: #2563eb; /* Blue active button */
+      color: #fff;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    }
+    
+    .toggle-btn:hover:not(.active) {
+      background: rgba(255, 165, 0, 0.2); /* Orange hover */
+      color: rgba(255,255,255,0.9);
+    }
+    
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.875rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary { 
+      background: #2563eb; 
+      color: white; 
+    }
+    
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+    
+    .btn-google { 
+      background: rgba(255,255,255,0.95); 
+      color: #111; 
+      display: flex; 
+      align-items: center; 
+      gap: 0.5rem; 
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    
+    .btn-google:hover {
+      background: #fff;
+      transform: translateY(-1px);
+    }
+    
+    .form-group { 
+      margin-bottom: 1rem; 
+    }
+    
+    .form-group label { 
+      display: block; 
+      margin-bottom: 0.4rem; 
+      font-weight: 600; 
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.95);
+    }
+    
+    input[type="email"], 
+    input[type="text"], 
+    input[type="password"] {
+      width: 100%; 
+      padding: 0.875rem; 
+      border-radius: 10px; 
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.1); 
+      color: #fff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    input[type="email"]:focus, 
+    input[type="text"]:focus, 
+    input[type="password"]:focus {
+      outline: none;
+      border-color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.15);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.1);
+    }
+    
+    input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .muted { 
+      color: rgba(255,255,255,0.8); 
+      font-size: 0.9rem; 
+      text-align: center; 
+      margin: 0.75rem 0;
+    }
+    
+    .message { 
+      padding: 0.75rem; 
+      border-radius: 8px; 
+      margin-top: 0.75rem; 
+      display: none; 
+      font-size: 0.95rem; 
+    }
+    
+    .message.success { 
+      background: rgba(16,185,129,0.15); 
+      color: #a7f3d0; 
+      border: 1px solid rgba(16,185,129,0.3);
+    }
+    
+    .message.error { 
+      background: rgba(248,113,113,0.15); 
+      color: #fecaca; 
+      display: none;
+      border: 1px solid rgba(248,113,113,0.3);
+    }
+    
+    .divider { 
+      text-align: center; 
+      margin: 1rem 0; 
+      color: rgba(255,255,255,0.7);
+      position: relative;
+    }
+    
+    .divider::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .divider span {
+      background: rgba(255,255,255,0.1);
+      padding: 0 1rem;
+      backdrop-filter: blur(10px);
+    }
+    
+    .small { 
+      font-size: 0.85rem; 
+      color: rgba(255,255,255,0.8); 
+      text-align: center; 
+      margin-top: 1rem; 
+      line-height: 1.4;
+    }
+    
+    /* Login form sections */
+    .user-login, .admin-login {
+      display: none;
+    }
+    
+    .user-login.active, .admin-login.active {
+      display: block;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      body {
+        padding: 0.5rem;
+      }
+      
+      .login-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+      
+      .btn {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+      }
+      
+      input[type="email"], 
+      input[type="text"], 
+      input[type="password"] {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+      }
+      
+      .toggle-btn {
+        padding: 10px;
+        font-size: 0.9rem;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .login-card {
+        padding: 1rem;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+      }
+      
+      .btn {
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* Tablet landscape */
+    @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+      body {
+        align-items: flex-start;
+        padding-top: 2rem;
+      }
+      
+      .login-card {
+        max-width: 450px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="login-card" role="main">
+    <h2>Sign in to City Issue Reporter</h2>
+
+    <!-- Login Type Toggle -->
+    <div class="login-toggle">
+      <button type="button" class="toggle-btn active" data-type="user">User Login</button>
+      <button type="button" class="toggle-btn" data-type="admin">Admin Login</button>
+    </div>
+
+    <!-- User Login Section -->
+    <div class="user-login active">
+      <!-- Google OAuth -->
+      <button id="googleBtn" class="btn btn-google" type="button" aria-label="Sign in with Google">
+        <svg width="18" height="18" viewBox="0 0 48 48" style="vertical-align:middle">
+          <path fill="#EA4335" d="M24 9.5c3.9 0 6.7 1.7 8.2 3.2l6-6C34.5 3 29.6 1.5 24 1.5 14.8 1.5 6.9 6.9 3.3 14.4l7.9 6.1C12.9 15 17.9 9.5 24 9.5z"></path>
+          <path fill="#34A853" d="M46.5 24.5c0-1.5-.1-2.6-.3-3.7H24v7.1h12.6c-.5 2.8-2.1 5.2-4.5 6.9l7 5.4C44.6 36.1 46.5 30.8 46.5 24.5z"></path>
+          <path fill="#4A90E2" d="M10.7 28.5A14.4 14.4 0 0 1 10 24c0-1 .1-1.9.3-2.8L3.3 14.4A23.8 23.8 0 0 0 1.5 24c0 3.9 1 7.6 2.8 10.9l6.4-6.4z"></path>
+          <path fill="#FBBC05" d="M24 46.5c6.6 0 12.2-2.1 16.3-5.8l-7-5.4c-2 1.3-4.6 2.1-9.3 2.1-6.1 0-11.1-5.5-12.5-12.8l-7.9 6.1C6.9 41.1 14.8 46.5 24 46.5z"></path>
+        </svg>
+        <span>Sign in with Google</span>
+      </button>
+
+      <div class="divider"><span>or</span></div>
+
+      <!-- Email magic link -->
+      <form id="emailForm" aria-label="Sign in via email">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Send magic sign-in link</button>
+        <div id="emailMsg" class="message success">Check your email for the login link.</div>
+        <div id="emailError" class="message error">Error sending link.</div>
+      </form>
+    </div>
+
+    <!-- Admin Login Section -->
+    <div class="admin-login">
+      <form id="adminForm" aria-label="Admin login">
+        <div class="form-group">
+          <label for="adminUsername">Username</label>
+          <input id="adminUsername" type="text" placeholder="Enter admin username" required />
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input id="adminPassword" type="password" placeholder="Enter admin password" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Sign in as Admin</button>
+        <div id="adminMsg" class="message success">Admin login successful!</div>
+        <div id="adminError" class="message error">Invalid admin credentials.</div>
+      </form>
+    </div>
+
+    <div class="small">By signing in you agree to the project terms.</div>
+  </div>
+
+  <!-- --- Supabase auth script (ESM) --- -->
+  <script type="module">
+    // ====== Replace these with your project's values ======
+    const SUPABASE_URL = 'https://tpcpjxiafgptviandelc.supabase.co'; 
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwY3BqeGlhZmdwdHZpYW5kZWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNjk4NDcsImV4cCI6MjA3Mjc0NTg0N30.TYcP-D68eufxqnNgjsdMpkt0xoekP-whJZ9mkDgLAdM';
+    // ====================================================
+
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // UI references
+    const googleBtn = document.getElementById('googleBtn');
+    const emailForm = document.getElementById('emailForm');
+    const adminForm = document.getElementById('adminForm');
+    const emailMsg = document.getElementById('emailMsg');
+    const emailError = document.getElementById('emailError');
+    const adminMsg = document.getElementById('adminMsg');
+    const adminError = document.getElementById('adminError');
+
+    // Toggle references
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    const userLogin = document.querySelector('.user-login');
+    const adminLogin = document.querySelector('.admin-login');
+
+    // Destination after successful sign-in:
+    const redirectTo = window.location.origin + '/feed';
+    const adminRedirectTo = window.location.origin + '/admin-dashboard'; // You can change this
+
+    // ------------- Toggle functionality -------------
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.type;
+        
+        // Update active states
+        toggleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        // Show/hide login sections
+        if (type === 'user') {
+          userLogin.classList.add('active');
+          adminLogin.classList.remove('active');
+        } else {
+          userLogin.classList.remove('active');
+          adminLogin.classList.add('active');
+        }
+        
+        // Hide any visible messages
+        emailMsg.style.display = 'none';
+        emailError.style.display = 'none';
+        adminMsg.style.display = 'none';
+        adminError.style.display = 'none';
+      });
+    });
+
+    // ------------- Check if user already signed-in (session present) -------------
+    (async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (data?.session) {
+          // already signed in -> go to dashboard
+          window.location.href = redirectTo;
+        }
+      } catch (err) {
+        console.error('Session check error', err);
+      }
+    })();
+
+    // ------------- Google OAuth -------------
+    googleBtn.addEventListener('click', async () => {
+      googleBtn.disabled = true;
+      try {
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo }
+        });
+        if (error) {
+          console.error('OAuth error', error);
+          alert('Login error: ' + error.message);
+          googleBtn.disabled = false;
+        }
+        // On success, user will be redirected to the provider and back to Supabase => then to redirectTo
+      } catch (err) {
+        console.error(err);
+        googleBtn.disabled = false;
+      }
+    });
+
+    // ------------- Email magic link -------------
+    emailForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      emailMsg.style.display = 'none';
+      emailError.style.display = 'none';
+
+      const email = document.getElementById('email').value.trim();
+      if (!email) return;
+
+      try {
+        const { data, error } = await supabase.auth.signInWithOtp({
+          email,
+          options: { emailRedirectTo: redirectTo }
+        });
+        if (error) {
+          console.error('Magic link error', error);
+          emailError.textContent = error.message || 'Error sending link';
+          emailError.style.display = 'block';
+        } else {
+          emailMsg.style.display = 'block';
+        }
+      } catch (err) {
+        console.error(err);
+        emailError.textContent = 'Unexpected error';
+        emailError.style.display = 'block';
+      }
+    });
+
+    // ------------- Admin Login -------------
+adminForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  adminMsg.style.display = 'none';
+  adminError.style.display = 'none';
+
+  const username = document.getElementById('adminUsername').value.trim();
+  const password = document.getElementById('adminPassword').value.trim();
+
+  if (!username || !password) {
+    adminError.textContent = 'Please enter both username and password';
+    adminError.style.display = 'block';
+    return;
+  }
+
+  // ✅ Admin credentials
+  if (username === 'Admin' && password === 'Admin' ) {
+    adminMsg.textContent = 'Admin login successful!';
+    adminMsg.style.display = 'block';
+    setTimeout(() => {
+      window.location.href = '/admin';
+    }, 1000);
+    return;
+  }
+
+  // ✅ Officer credentials
+  if (username === 'officer@admin' && password === 'admin') {
+    adminMsg.textContent = 'Officer login successful!';
+    adminMsg.style.display = 'block';
+    setTimeout(() => {
+      window.location.href = '/officerpage';
+    }, 1000);
+    return;
+  }
+
+  // ❌ Invalid credentials
+  adminError.textContent = 'Invalid admin credentials';
+  adminError.style.display = 'block';
+});
+
+
+    // ------------- Optional: respond to auth state changes -------------
+    supabase.auth.onAuthStateChange((event, session) => {
+      // useful if you want to react immediately to sign-in/sign-out events
+      if (session?.user) {
+        // redirect to dashboard if signed in
+        window.location.href = redirectTo;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civic Connect </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/weblogo.png">
+    <style>
+        :root {
+            --primary-orange: #ff6b35;
+            --secondary-orange: #ff8c42;
+            --dark-bg: #18191a;
+            --darker-bg: #242526;
+            --card-bg: #242526;
+            --text-primary: #e4e6ea;
+            --text-secondary: #b0b3b8;
+            --border-color: #3a3b3c;
+            --facebook-blue: #1877f2;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1b1e 100%);
+            color: var(--text-primary);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glass-effect {
+            background: rgba(36, 37, 38, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .post-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-orange);
+        }
+
+        .vote-btn {
+            transition: all 0.2s ease;
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+        }
+
+        .vote-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .vote-up:hover {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .vote-down:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .action-btn {
+            transition: all 0.2s ease;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            border-radius: 12px;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary-orange);
+            transform: translateY(-1px);
+        }
+
+        .native-share-modal {
+            background: var(--dark-bg);
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .native-share-modal.show {
+            transform: translateY(0);
+        }
+
+        .share-option {
+            transition: all 0.2s ease;
+        }
+
+        .share-option:hover {
+            background: var(--border-color);
+            transform: scale(1.05);
+        }
+
+        .floating-header {
+            background: rgba(24, 25, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comment-input {
+            background: var(--darker-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .comment-input:focus {
+            border-color: var(--primary-orange);
+            outline: none;
+        }
+
+        .avatar {
+            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+        }
+
+        .user-profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-orange);
+        }
+
+        .post-image {
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .location-badge {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+
+        /* Profile Dropdown */
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            min-width: 160px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .profile-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .profile-dropdown-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+            border-radius: 8px;
+            margin: 4px;
+        }
+
+        .profile-dropdown-item:hover {
+            background: var(--border-color);
+            color: var(--primary-orange);
+        }
+
+        .profile-dropdown-item i {
+            margin-right: 12px;
+            width: 16px;
+        }
+
+        /* Account Details View */
+        .account-details-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--dark-bg);
+            z-index: 2000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .account-details-view.show {
+            transform: translateX(0);
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(24, 25, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-color);
+            z-index: 1000;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav {
+                display: block;
+            }
+            
+            .desktop-toggle {
+                display: none !important;
+            }
+            
+            body {
+                padding-bottom: 80px;
+            }
+        }
+
+        .mobile-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .mobile-nav-item.active {
+            color: var(--primary-orange);
+        }
+
+        .mobile-nav-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--primary-orange);
+            border-radius: 50%;
+        }
+
+        /* Desktop Toggle Enhancement */
+        .desktop-toggle {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background: var(--darker-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 4px;
+        }
+
+        .toggle-option {
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .toggle-option.active {
+            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple-effect::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: width 0.6s, height 0.6s;
+            transform: translate(-50%, -50%);
+        }
+
+        .ripple-effect:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .post-card {
+                margin: 0 10px;
+            }
+            
+            .native-share-modal {
+                border-radius: 20px 20px 0 0;
+            }
+
+            .floating-action {
+                bottom: 100px;
+            }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary-orange), var(--secondary-orange));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .thumbnail {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <!-- Floating Header -->
+    <div class="floating-header sticky top-0 z-40">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center">
+                        <i class="fas fa-users text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold gradient-text">Civic Connect</h1>
+                        <p class="text-sm text-gray-400">Your community, your voice</p>
+                    </div>
+                </div>
+                
+                <!-- Desktop Toggle Switch -->
+                <div class="desktop-toggle hidden md:flex">
+                    <div class="toggle-option active" data-view="feed" id="feedToggle">Community Feed</div>
+                    <div class="toggle-option" data-view="leaderboard" id="leaderboardToggle">Trending</div>
+                </div>
+
+                <!-- User Profile -->
+                <div class="relative">
+                    <div class="flex items-center cursor-pointer" id="userProfile">
+                        <div class="avatar w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                            G
+                        </div>
+                    </div>
+                    <!-- Desktop Profile Dropdown -->
+                    <div class="profile-dropdown" id="desktopProfileDropdown">
+                        <a href="/UserDashboard" class="profile-dropdown-item">
+                            <i class="fas fa-user"></i>
+                            Account
+                        </a>
+                        <a href="#" class="profile-dropdown-item" id="desktopLogout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-6">
+        <!-- Issues View (Facebook-like Feed) -->
+        <div id="issuesView" class="space-y-6">
+            <!-- Dynamic content will be populated here -->
+        </div>
+
+        <!-- Leaderboard View -->
+        <div id="leaderboardView" class="hidden">
+            <div class="text-center mb-8 glass-effect rounded-2xl p-6">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full gradient-bg flex items-center justify-center">
+                    <i class="fas fa-trophy text-white text-3xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold gradient-text mb-2">Community Leaders</h2>
+                <p class="text-gray-400">Issues that matter most to our community</p>
+            </div>
+            <div id="leaderboard" class="space-y-4">
+                <!-- Dynamic content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation (Instagram-style) -->
+    <div class="mobile-nav">
+        <div class="flex">
+            <div class="mobile-nav-item active" data-view="feed">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs">Home</span>
+            </div>
+            <div class="mobile-nav-item" data-view="leaderboard">
+                <i class="fas fa-chart-line text-xl mb-1"></i>
+                <span class="text-xs">Trending</span>
+            </div>
+            <div class="mobile-nav-item" id="mobileProfileBtn">
+                <div class="avatar w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold" id="mobileProfile">
+                    G
+                </div>
+                <span class="text-xs">Profile</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Account Details View -->
+    <div class="account-details-view" id="accountDetailsView">
+        <div class="p-6">
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-2xl font-bold gradient-text">Account Details</h1>
+                <button id="closeAccountDetails" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="space-y-4">
+                <div class="post-card rounded-2xl p-6">
+                    <a href="/UserDashboard" class="flex items-center justify-between group">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-white group-hover:text-orange-500 transition-colors">Account</h3>
+                                <p class="text-sm text-gray-400">Manage your account settings</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400 group-hover:text-orange-500 transition-colors"></i>
+                    </a>
+                </div>
+
+                <div class="post-card rounded-2xl p-6">
+                    <button class="flex items-center justify-between w-full group" id="mobileLogout">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-sign-out-alt text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-white group-hover:text-red-500 transition-colors">Logout</h3>
+                                <p class="text-sm text-gray-400">Sign out of your account</p>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400 group-hover:text-red-500 transition-colors"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Native-style Share Modal -->
+    <div id="shareModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black bg-opacity-50" id="shareOverlay"></div>
+        <div class="absolute bottom-0 left-0 right-0">
+            <div class="native-share-modal p-6" id="shareContent">
+                <!-- Modal Handle -->
+                <div class="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-6"></div>
+                
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">Share</h3>
+                </div>
+                
+                <!-- Share Options Grid -->
+                <div class="grid grid-cols-4 gap-4 mb-6">
+                    <button class="text-center p-4 hover:bg-gray-700 rounded-2xl transition-colors" data-platform="whatsapp">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-green-500 flex items-center justify-center">
+                            <i class="fab fa-whatsapp text-white text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-300">WhatsApp</span>
+                    </button>
+                    
+                    <button class="text-center p-4 hover:bg-gray-700 rounded-2xl transition-colors" data-platform="telegram">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-blue-400 flex items-center justify-center">
+                            <i class="fab fa-telegram text-white text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-300">Telegram</span>
+                    </button>
+                    
+                    <button class="text-center p-4 hover:bg-gray-700 rounded-2xl transition-colors" data-platform="facebook">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-blue-600 flex items-center justify-center">
+                            <i class="fab fa-facebook text-white text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-300">Facebook</span>
+                    </button>
+                    
+                    <button class="text-center p-4 hover:bg-gray-700 rounded-2xl transition-colors" data-platform="instagram">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                            <i class="fab fa-instagram text-white text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-300">Instagram</span>
+                    </button>
+                    
+                    <button class="text-center p-4 hover:bg-gray-700 rounded-2xl transition-colors" data-platform="linkedin">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-blue-700 flex items-center justify-center">
+                            <i class="fab fa-linkedin text-white text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-300">LinkedIn</span>
+                    </button>
+                    
+                    <button class="text-center p-4 hover:bg-gray-700 rounded-2xl transition-colors" data-platform="copy">
+                        <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gray-600 flex items-center justify-center">
+                            <i class="fas fa-link text-white text-xl"></i>
+                        </div>
+                        <span class="text-xs text-gray-300">Copy link</span>
+                    </button>
+                </div>
+                
+                <!-- Cancel Button -->
+                <button id="cancelShare" class="w-full py-4 bg-gray-700 hover:bg-gray-600 rounded-xl text-white font-medium transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="floating-action w-14 h-14 rounded-full text-white shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300" onclick="window.location.href='/UserDashboard'" title="Report an Issue">
+            <i class="fas fa-plus text-xl"></i>
+        </button>
+
+
+    <script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://tpcpjxiafgptviandelc.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwY3BqeGlhZmdwdHZpYW5kZWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNjk4NDcsImV4cCI6MjA3Mjc0NTg0N30.TYcP-D68eufxqnNgjsdMpkt0xoekP-whJZ9mkDgLAdM';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Stores
+let commentsStore = {};
+let currentShareData = null;
+let voterToken = null;
+
+// --- Utilities ---
+function getOrCreateVoterToken() {
+    if (!voterToken) voterToken = crypto.randomUUID();
+    return voterToken;
+}
+
+async function getCurrentUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user;
+}
+
+// --- Profile Functionality ---
+async function updateUserProfile() {
+    const user = await getCurrentUser();
+    if (!user) return;
+
+    const username = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+    const avatarUrl = user.user_metadata?.avatar_url;
+
+    // 🔹 Save into profiles table
+    await supabase.from("profiles").upsert({
+        id: user.id,
+        full_name: username,
+        avatar_url: avatarUrl
+    });
+
+    // Desktop profile
+    const userProfile = document.getElementById('userProfile');
+    if (userProfile) {
+        userProfile.innerHTML = avatarUrl
+            ? `<img src="${avatarUrl}" class="user-profile-img cursor-pointer" alt="Profile">`
+            : `<div class="avatar w-10 h-10 rounded-full flex items-center justify-center text-white font-bold cursor-pointer">${username.charAt(0).toUpperCase()}</div>`;
+    }
+
+    // Mobile profile
+    const mobileProfile = document.getElementById('mobileProfile');
+    if (mobileProfile) {
+        mobileProfile.innerHTML = avatarUrl
+            ? `<img src="${avatarUrl}" class="w-8 h-8 rounded-full object-cover border-2 border-orange-500" alt="Profile">`
+            : `<div class="avatar w-8 h-8 rounded-full flex items-center justify-center text-white font-bold">${username.charAt(0).toUpperCase()}</div>`;
+    }
+}
+
+// Desktop profile dropdown functionality
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('desktopProfileDropdown');
+    const userProfile = document.getElementById('userProfile');
+    
+    if (userProfile && userProfile.contains(e.target)) {
+        dropdown.classList.toggle('show');
+    } else if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('show');
+    }
+});
+
+// Mobile profile functionality
+document.getElementById('mobileProfileBtn').onclick = () => {
+    // Remove active state from current active item
+    document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
+    // Don't add active state to profile button as it opens a new view
+    
+    document.getElementById('accountDetailsView').classList.add('show');
+};
+
+document.getElementById('closeAccountDetails').onclick = () => {
+    document.getElementById('accountDetailsView').classList.remove('show');
+    // Restore active state to home
+    document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelector('.mobile-nav-item[data-view="feed"]').classList.add('active');
+};
+
+// Logout functionality
+async function handleLogout() {
+    try {
+        await supabase.auth.signOut();
+        window.location.href = '/login';
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
+}
+
+document.getElementById('desktopLogout').onclick = (e) => {
+    e.preventDefault();
+    handleLogout();
+};
+
+document.getElementById('mobileLogout').onclick = handleLogout;
+
+// --- Address Helper ---
+async function getAddressFromCoordinates(lat, lng) {
+    try {
+        const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=a05987b56e6245e38f97be536bd183e5`);
+        const data = await response.json();
+        if (data.results?.length > 0) return data.results[0].formatted;
+        return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    } catch {
+        return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    }
+}
+
+
+
+// Load reports and include signed image URLs
+async function loadReports() {
+    const { data, error } = await supabase.rpc('get_report_vote_scores_with_images');
+
+    if (error) {
+        console.error("Load reports error", error);
+        return [];
+    }
+
+    const grouped = {};
+
+    for (const r of data) {
+        if (!grouped[r.report_id]) {
+            grouped[r.report_id] = {
+                id: r.report_id,
+                name: r.name,
+                email: r.email,
+                location: r.location,
+                description: r.description,
+                category: r.category,
+                status: r.status,
+                created_at: r.created_at,
+                latitude: r.latitude,
+                longitude: r.longitude,
+                votes: r.votes,
+                report_images: []
+            };
+        }
+
+        if (r.image_url) {
+    grouped[r.report_id].report_images.push({ image_url: r.image_url });
+}
+
+    }
+    return Object.values(grouped);
+}
+
+
+
+// --- Rendering ---
+async function renderIssues() {
+    const rows = await loadReports();
+    const container = document.getElementById('issuesView');
+    container.innerHTML = rows.map(issue => {
+        const images = issue.report_images || [];
+        return `
+            <div class="post-card rounded-2xl overflow-hidden p-6">
+                <div class="flex items-center mb-4">
+                    <div class="avatar w-12 h-12 rounded-full flex items-center justify-center text-white font-bold">
+                        ${issue.category ? issue.category.charAt(0).toUpperCase() : 'C'}
+                    </div>
+                    <div class="ml-3">
+                        <div class="font-semibold text-lg text-white">${issue.category || 'Community Issue'}</div>
+                        <div class="text-sm text-gray-400">${issue.location || 'Unknown location'}</div>
+                        <span class="px-2 py-1 rounded-full text-xs ${issue.status==='open' ? 'bg-green-600' : 'bg-gray-600'}">
+                            ${issue.status || 'Pending'}
+                        </span>
+                    </div>
+                </div>
+
+                <p class="text-gray-200 mb-4">${issue.description || ''}</p>
+                ${images.length ? `
+                    <div class="grid grid-cols-${Math.min(images.length,2)} gap-2 mb-4">
+                        ${images.slice(0,4).map((img,i) => `
+                        <div class="relative">
+                            <img src="${img.image_url}" class="post-image w-full h-48 object-cover rounded-lg">
+                            ${images.length > 4 && i === 3 ? `<div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white font-bold">+${images.length-4}</div>` : ''}
+                        </div>
+                    `).join('')}
+
+                    </div>` : ''}
+                <div class="flex justify-between text-sm text-gray-400 border-t border-gray-700 pt-3">
+                    <span>${issue.votes || 0} likes • ${(commentsStore[issue.id] || []).length} comments</span>
+                    <span>0 shares</span>
+                </div>
+                <div class="grid grid-cols-4 gap-2 border-t border-gray-700 pt-3">
+                    <button class="vote-btn vote-up" data-id="${issue.id}"><i class="fas fa-thumbs-up"></i></button>
+                    <button class="vote-btn vote-down" data-id="${issue.id}"><i class="fas fa-thumbs-down"></i></button>
+                    <button onclick="toggleComments('${issue.id}')"><i class="far fa-comment"></i></button>
+                    <button onclick="openShareModal('${issue.id}','${encodeURIComponent(issue.title||'Issue')}','${encodeURIComponent(issue.description||'')}')"><i class="far fa-share-square"></i></button>
+                </div>
+                <div id="comments-${issue.id}" class="hidden border-t border-gray-700 mt-3 p-3"></div>
+            </div>
+        `;
+    }).join('');
+    attachVoteHandlers();
+}
+
+async function renderLeaderboard() {
+    const rows = await loadReports();
+    const container = document.getElementById('leaderboard');
+
+    container.innerHTML = rows.map((issue, i) => `
+        <div class="post-card rounded-2xl p-6 flex items-center space-x-4">
+            <div class="w-12 h-12 flex items-center justify-center rounded-lg ${i<3 ? 'gradient-bg' : 'bg-gray-700'} text-white font-bold">
+                ${i<3 ? (i===0 ? '🥇' : i===1 ? '🥈' : '🥉') : i+1}
+            </div>
+
+            <div class="flex-1 flex items-center space-x-3">
+                ${issue.report_images && issue.report_images.length > 0 ? `
+                    <img src="${issue.report_images[0].image_url}" class="w-12 h-12 object-cover rounded-lg" alt="Report Image">
+                ` : ''}
+                <div>
+                    <div class="font-bold text-lg">${issue.title || 'Untitled'}</div>
+                    <p class="text-gray-400 text-sm">${issue.description || ''}</p>
+                </div>
+            </div>
+
+            <div class="text-sm text-gray-400">${issue.votes || 0} votes</div>
+        </div>
+    `).join('');
+
+    attachVoteHandlers();
+}
+
+// --- Voting ---
+function attachVoteHandlers() {
+    document.querySelectorAll('.vote-up').forEach(btn=>{
+        btn.onclick=async e=>{ await castVote(e.currentTarget.dataset.id,1); };
+    });
+    document.querySelectorAll('.vote-down').forEach(btn=>{
+        btn.onclick=async e=>{ await castVote(e.currentTarget.dataset.id,-1); };
+    });
+}
+
+    // --- Voting ---
+    async function castVote(reportId, value) {
+    try {
+        // ✅ Ensure we have a token for this session
+        const token = getOrCreateVoterToken();
+
+        // 1️⃣ Insert vote with token
+        const { error } = await supabase
+            .from("votes")
+            .insert([{
+                report_id: reportId,
+                voter_token: token,   // ✅ Send voter token
+                value: value
+            }]);
+
+        if (error) {
+            console.error("Vote insert error:", error);
+            return;
+        }
+
+        // 2️⃣ Refresh UI
+        await renderIssues();
+        await renderLeaderboard();
+
+    } catch (err) {
+        console.error("Unexpected vote error:", err);
+    }
+}
+
+
+
+
+
+// --- Comments ---
+window.toggleComments = async (id)=>{
+    const c=document.getElementById(`comments-${id}`);
+    c.classList.toggle('hidden');
+    if(!c.classList.contains('hidden')) await renderComments(id);
+};
+
+// --- Comments ---
+async function renderComments(reportId) {
+    const { data, error } = await supabase
+        .from("comments")
+        .select(`
+        id,
+        content,
+        created_at,
+        user_id,
+        profiles ( full_name, avatar_url)
+        `)
+        .eq("report_id", reportId)
+        .order("created_at");
+
+    if (error) {
+        console.error("Comment fetch error", error);
+        return;
+    }
+
+    commentsStore[reportId] = data;
+    const container = document.getElementById(`comments-${reportId}`);
+
+    container.innerHTML = `
+        <div class="flex space-x-2 mb-2">
+            <input id="comment-input-${reportId}" class="flex-1 comment-input rounded-lg px-3 py-2" placeholder="Write a comment..." />
+            <button onclick="addComment('${reportId}')" class="px-4 py-2 rounded-lg bg-orange-500 text-white">Post</button>
+        </div>
+        ${data.map(c=>`
+            <div class="bg-gray-700 rounded-xl p-2 my-1">
+            <div class="flex items-center space-x-2 mb-1">
+            <div class="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center bg-gray-600 text-white text-sm font-bold">
+                ${c.profiles?.avatar_url 
+                    ? `<img src="${c.profiles.avatar_url}" class="w-full h-full object-cover">` 
+                    : (c.profiles?.full_name?.charAt(0) || 'U')}
+            </div>
+            <span class="font-bold text-sm text-white">${c.profiles?.full_name || 'Anon'}</span>
+            </div>
+            <div class="text-gray-200">${c.content}</div>
+                <div>${c.content}</div>
+            </div>
+        `).join("")}
+    `;
+}
+
+
+window.addComment = async (reportId) => {
+  const input = document.getElementById(`comment-input-${reportId}`);
+  const content = input.value.trim();
+  if (!content) return;
+
+  const user = await getCurrentUser();
+  if (!user) {
+    alert("You must be logged in to comment.");
+    return;
+  }
+
+  // ✅ Ensure profile exists
+  await supabase.from("profiles").upsert({
+    id: user.id,
+    full_name: user.user_metadata?.full_name || user.email?.split("@")[0] || "User",
+    avatar_url: user.user_metadata?.avatar_url || null,
+  });
+
+  // ✅ Insert comment
+  const { error } = await supabase.from("comments").insert({
+    report_id: reportId,
+    user_id: user.id,
+    content,
+  });
+
+  if (error) {
+    console.error("Comment insert error", error);
+    return;
+  }
+
+  input.value = "";
+  await renderComments(reportId);
+};
+
+
+
+
+
+// --- Share Modal ---
+window.openShareModal=(id,title,desc)=>{
+    currentShareData={id,title:decodeURIComponent(title),description:decodeURIComponent(desc)};
+    document.getElementById('shareModal').classList.remove('hidden');
+    setTimeout(()=>document.getElementById('shareContent').classList.add('show'),10);
+};
+function closeShareModal(){
+    const modal=document.getElementById('shareModal');
+    const content=document.getElementById('shareContent');
+    content.classList.remove('show');
+    setTimeout(()=>modal.classList.add('hidden'),300);
+}
+document.getElementById('shareOverlay').onclick=closeShareModal;
+document.getElementById('cancelShare').onclick=closeShareModal;
+
+function handleShare(platform) {
+    const url = window.location.href;
+    const title = currentShareData?.title || "Civic Connect Issue";
+    const desc = currentShareData?.description || "";
+
+    let shareUrl = "";
+    switch (platform) {
+        case "whatsapp": shareUrl = `https://wa.me/?text=${encodeURIComponent(title + " - " + desc + " " + url)}`; break;
+        case "telegram": shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title + " - " + desc)}`; break;
+        case "facebook": shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`; break;
+        case "instagram": shareUrl =`https://www.instagram.com`; return;
+        case "linkedin": shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`; break;
+        case "copy": navigator.clipboard.writeText(url); alert("Link copied to clipboard!"); return;
+    }
+    if (shareUrl) window.open(shareUrl, "_blank");
+}
+document.querySelectorAll("[data-platform]").forEach(btn => {
+    btn.addEventListener("click", () => handleShare(btn.dataset.platform));
+});
+
+// --- Navigation toggles ---
+document.getElementById('feedToggle').onclick=async()=>{
+    document.getElementById('feedToggle').classList.add('active');
+    document.getElementById('leaderboardToggle').classList.remove('active');
+    document.getElementById('issuesView').classList.remove('hidden');
+    document.getElementById('leaderboardView').classList.add('hidden');
+    await renderIssues();
+};
+document.getElementById('leaderboardToggle').onclick=async()=>{
+    document.getElementById('leaderboardToggle').classList.add('active');
+    document.getElementById('feedToggle').classList.remove('active');
+    document.getElementById('issuesView').classList.add('hidden');
+    document.getElementById('leaderboardView').classList.remove('hidden');
+    await renderLeaderboard();
+};
+
+// Mobile navigation (excluding profile button which is handled separately)
+document.querySelectorAll('.mobile-nav-item[data-view]').forEach(item=>{
+    item.onclick=async()=>{
+        document.querySelectorAll('.mobile-nav-item').forEach(el=>el.classList.remove('active'));
+        item.classList.add('active');
+        if(item.dataset.view==='feed'){ 
+            document.getElementById('issuesView').classList.remove('hidden');
+            document.getElementById('leaderboardView').classList.add('hidden');
+            await renderIssues();
+        } else {
+            document.getElementById('issuesView').classList.add('hidden');
+            document.getElementById('leaderboardView').classList.remove('hidden');
+            await renderLeaderboard();
+        }
+    };
+});
+
+// --- Init ---
+async function init(){
+    await updateUserProfile();
+    await renderIssues();
+    supabase.channel('public:votes').on('postgres_changes',{event:'*',schema:'public',table:'votes'},()=>renderLeaderboard()).subscribe();
+    supabase.channel('public:comments').on('postgres_changes',{event:'*',schema:'public',table:'comments'},p=>renderComments(p.new.report_id)).subscribe();
+}
+init();
+</script>
+
+</body>
+</html>

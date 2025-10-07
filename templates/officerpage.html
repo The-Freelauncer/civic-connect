@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officer's Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <link rel="icon" href="/static/weblogo.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1f2937;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        /* Enhanced status badges with gradients and shadows */
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .status-pending {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #ffffff;
+        }
+        
+        .status-in-progress {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: #ffffff;
+        }
+        
+        .status-completed {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+        }
+        
+        .status-rejected {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: #ffffff;
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .info-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .info-item strong {
+            font-weight: 700;
+            color: #374151;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-item span {
+            color: #6b7280;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        /* Enhanced report cards with glassmorphism */
+        .report-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 32px 64px -12px rgba(0, 0, 0, 0.25),
+                0 16px 32px -8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .report-card:hover::before {
+            opacity: 1;
+        }
+        
+        /* Enhanced header with animated background */
+        .header-bg {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Enhanced buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            color: #5b21b6;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        /* Enhanced filter dropdown */
+        .filter-select {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        
+        /* Enhanced attached images */
+        .attached-images img {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+        }
+        
+        .attached-images img:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            outline: 3px solid #667eea;
+            outline-offset: 4px;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 1rem;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .map-container:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Loading animation enhancement */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Page background pattern */
+        .page-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+        
+        .page-bg::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 50m-40 0a40,40 0 1,1 80,0a40,40 0 1,1 -80,0' stroke='%23ffffff' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        
+        /* Card header enhancement */
+        .card-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Enhanced typography */
+        .report-title {
+            background: linear-gradient(135deg, #374151, #1f2937);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="page-bg">
+
+    <div class="header-bg py-16 shadow-2xl relative">
+        <div class="container mx-auto px-6 text-center flex justify-between items-center relative z-10">
+            <a href="/login" class="btn-primary inline-flex items-center justify-center rounded-2xl px-6 py-3 text-base font-bold shadow-lg hover:shadow-xl transition-all duration-300">
+                ← Sign out 
+            </a>
+            <div class="text-center">
+                <h1 class="text-5xl sm:text-7xl font-black text-white leading-tight tracking-tight">
+                    Officer's
+                </h1>
+                <p class="text-xl text-white/80 mt-2 font-light">Management Dashboard</p>
+            </div>
+            <div class="w-40 h-12"></div> <!-- Placeholder to balance the layout -->
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 py-12">
+        <div class="mb-10">
+            <label for="category-filter" class="block text-lg font-bold text-white mb-4">Filter by Category</label>
+            <select id="category-filter" class="filter-select w-full pl-4 pr-12 py-4 text-base rounded-2xl shadow-xl font-semibold">
+                <option value="all">All Categories</option>
+            </select>
+        </div>
+        
+        <div id="report-container" class="space-y-8">
+            <div class="text-center py-20 text-white" id="loading-message">
+                <div class="loading-pulse">
+                    <svg class="animate-spin h-16 w-16 text-white mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+                <p class="text-2xl font-light">Loading reports...</p>
+                <p class="text-white/60 mt-2">Please wait while we fetch your data</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase with your credentials
+        const supabaseUrl = "https://tpcpjxiafgptviandelc.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwY3BqeGlhZmdwdHZpYW5kZWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNjk4NDcsImV4cCI6MjA3Mjc0NTg0N30.TYcP-D68eufxqnNgjsdMpkt0xoekP-whJZ9mkDgLAdM";
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let allReportsData = [];
+
+        // Helper function to get status badge HTML
+        function getStatusBadge(status) {
+            const statusMap = {
+                "Pending": "Work Under Process",
+                "In Progress": "In Progress",
+                "Completed": "Completed",
+                "Rejected": "Rejected"
+            };
+
+            const classMap = {
+                "Pending": "pending",
+                "In Progress": "in-progress",
+                "Completed": "completed",
+                "Rejected": "rejected"
+            };
+
+            const displayStatus = statusMap[status] || status;
+            const statusClass = classMap[status] || status.toLowerCase().replace(/\s+/g, '-');
+
+            return `<span class="status-badge status-${statusClass}">${displayStatus}</span>`;
+        }
+
+        // Renders the reports to the UI based on the provided array
+        async function renderReports(reportsToRender) {
+            const reportContainer = document.getElementById('report-container');
+            reportContainer.innerHTML = '';
+
+            if (!reportsToRender || reportsToRender.length === 0) {
+                reportContainer.innerHTML = '<div class="text-center py-20"><p class="text-2xl text-white/80 font-light">No reports found for this category.</p><p class="text-white/60 mt-2">Try selecting a different category or check back later.</p></div>';
+                return;
+            }
+
+            for (const report of reportsToRender) {
+                const { data: imagesData, error: imagesError } = await supabaseClient
+                    .from('report_images')
+                    .select('image_url')
+                    .eq('report_id', report.id);
+
+                if (imagesError) console.error('Failed to fetch images for report:', report.id, imagesError);
+
+                let imagesHtml = '';
+                if (imagesData && imagesData.length > 0) {
+                    imagesHtml = `<div class="info-item full-width mt-6">
+                                    <strong>📸 Attached Images</strong>
+                                    <div class="flex flex-wrap gap-4 attached-images mt-4">`;
+                    imagesData.forEach(img => {
+                        imagesHtml += `<img src="${img.image_url}" alt="Report Image" class="w-48 h-48 object-cover shadow-lg transition-all duration-300">`;
+                    });
+                    imagesHtml += `</div></div>`;
+                }
+                
+                const { data: locationData, error: locationError } = await supabaseClient
+                    .from('report_locations')
+                    .select('latitude, longitude')
+                    .eq('report_id', report.id)
+                    .single();
+
+                if (locationError) console.error('Failed to fetch location for report:', report.id, locationError);
+                
+                const mapHtml = (locationData && locationData.latitude && locationData.longitude)
+                    ? `<div class="full-width mt-6">
+                            <div class="info-item">
+                                <strong>🗺️ Location Map</strong>
+                                <div class="map-container mt-4">
+                                    <iframe
+                                        width="100%"
+                                        height="100%"
+                                        frameborder="0" style="border:0"
+                                        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBPsuaow_h6RYW6j4Nvl9BXroIiRLq1JtM&q=${locationData.latitude},${locationData.longitude}" allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                       </div>`
+                    : '';
+
+                const reportBlock = document.createElement('div');
+                reportBlock.className = 'report-card p-8 rounded-3xl transition-all duration-500';
+                reportBlock.innerHTML = `
+                    <div class="card-header flex justify-between items-center mb-6 pb-4 rounded-2xl p-4 -m-4 mb-6">
+                        <h2 class="report-title text-3xl font-black">Report #${report.id}</h2>
+                        ${getStatusBadge(report.status)}
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>👤 Name</strong>
+                            <span>${report.name}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>📧 Email</strong>
+                            <span>${report.email}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>📍 Location</strong>
+                            <span>${report.location}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>🏷️ Category</strong>
+                            <span>${report.category}</span>
+                        </div>
+                        <div class="info-item full-width">
+                            <strong>📝 Description</strong>
+                            <span>${report.description}</span>
+                        </div>
+                        ${mapHtml}
+                    </div>
+                    ${imagesHtml}
+                `;
+                reportContainer.appendChild(reportBlock);
+            }
+        }
+
+        // Fetch and display all reports on initial load
+        async function fetchAndDisplayAllReports() {
+            const loadingMessage = document.getElementById('loading-message');
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('reports')
+                    .select('id, name, email, location, description, status, category');
+
+                loadingMessage.style.display = 'none';
+
+                if (error) throw error;
+                allReportsData = data || [];
+
+                // Populate category filter
+                const categories = ['all', ...new Set(allReportsData.map(report => report.category))];
+                const filterSelect = document.getElementById('category-filter');
+                filterSelect.innerHTML = categories.map(cat => 
+                    `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`
+                ).join('');
+
+                renderReports(allReportsData);
+
+            } catch (err) {
+                console.error('Error fetching reports:', err);
+                loadingMessage.innerHTML = `<div class="text-center py-20"><div class="bg-red-500/20 backdrop-blur-lg border border-red-500/30 rounded-3xl p-8 max-w-2xl mx-auto"><p class="text-xl text-white font-semibold mb-2">⚠️ Error loading reports</p><p class="text-white/80">Please check your Supabase configuration and permissions.</p><p class="text-red-200 mt-4 text-sm font-mono">${err.message}</p></div></div>`;
+                loadingMessage.style.display = 'block';
+            }
+        }
+
+        // Add event listener for the category filter
+        document.getElementById('category-filter').addEventListener('change', (event) => {
+            const selectedCategory = event.target.value;
+            if (selectedCategory === 'all') {
+                renderReports(allReportsData);
+            } else {
+                const filteredReports = allReportsData.filter(report => report.category === selectedCategory);
+                renderReports(filteredReports);
+            }
+        });
+
+        // Run the function on page load
+        document.addEventListener('DOMContentLoaded', fetchAndDisplayAllReports);
+    </script>
+</body>
+</html>

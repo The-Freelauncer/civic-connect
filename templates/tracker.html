@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Civic Connect | Track Report</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="/static/weblogo.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 50%);
+      animation: patternFloat 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes patternFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(2deg); }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200px 0; }
+      100% { background-position: calc(200px + 100%) 0; }
+    }
+
+    .tracker-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 45px 40px;
+      border-radius: 24px;
+      box-shadow: 
+        0 25px 50px rgba(0,0,0,0.15),
+        0 0 0 1px rgba(255,255,255,0.2);
+      width: 100%;
+      max-width: 650px;
+      text-align: center;
+      position: relative;
+      animation: slideUp 0.8s ease-out;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      z-index: 1;
+    }
+
+    .tracker-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #667eea 100%);
+      background-size: 200% 100%;
+      border-radius: 24px 24px 0 0;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    .header-section {
+      margin-bottom: 35px;
+    }
+
+    .header-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      box-shadow: 
+        0 10px 30px rgba(102, 126, 234, 0.4),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      font-size: 28px;
+      color: white;
+      animation: pulse 4s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-icon::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+      border-radius: 50%;
+      animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+      to { transform: rotate(360deg); }
+    }
+
+    h2 {
+      color: #2d3748;
+      margin-bottom: 12px;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: #64748b;
+      margin-bottom: 0;
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .search-section {
+      margin: 35px 0;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    .input-group::before {
+      content: '\f002';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #a0aec0;
+      font-size: 16px;
+      z-index: 2;
+      transition: color 0.3s ease;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 20px 24px 20px 52px;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 16px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.9);
+      color: #2d3748;
+      outline: none;
+      font-weight: 500;
+    }
+
+    input[type="text"]:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+      background: rgba(255, 255, 255, 1);
+      transform: translateY(-1px);
+    }
+
+    input[type="text"]:focus + .input-group::before,
+    .input-group:hover::before {
+      color: #667eea;
+    }
+
+    input[type="text"]::placeholder {
+      color: #a0aec0;
+      font-weight: 400;
+    }
+
+    button {
+      padding: 20px 40px;
+      border: none;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 10px 30px rgba(102, 126, 234, 0.4),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+      position: relative;
+      overflow: hidden;
+      min-width: 160px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 15px 40px rgba(102, 126, 234, 0.5),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .report-info {
+      margin-top: 40px;
+      text-align: left;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 20px;
+      padding: 35px;
+      border: 1px solid rgba(255,255,255,0.5);
+      animation: slideUp 0.6s ease-out;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .report-info h3 {
+      color: #2d3748;
+      margin-bottom: 25px;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .info-item {
+      background: white;
+      padding: 18px 22px;
+      border-radius: 14px;
+      border-left: 4px solid #667eea;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transition: width 0.3s ease;
+    }
+
+    .info-item:hover {
+      transform: translateX(8px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+
+    .info-item:hover::before {
+      width: 100%;
+      opacity: 0.05;
+    }
+
+    .info-item strong {
+      color: #4a5568;
+      font-weight: 700;
+      display: inline-block;
+      min-width: 110px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-item span {
+      color: #2d3748;
+      word-break: break-word;
+      font-weight: 500;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .status-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.2); }
+    }
+
+    .status-pending {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      color: #92400e;
+      border: 1px solid #f59e0b;
+    }
+
+    .status-pending::before {
+      background: #f59e0b;
+    }
+
+    .status-in-progress {
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      color: #1e40af;
+      border: 1px solid #3b82f6;
+    }
+
+    .status-in-progress::before {
+      background: #3b82f6;
+    }
+
+    .status-completed {
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      color: #065f46;
+      border: 1px solid #10b981;
+    }
+
+    .status-completed::before {
+      background: #10b981;
+    }
+
+    .status-rejected {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      color: #991b1b;
+      border: 1px solid #ef4444;
+    }
+
+    .status-rejected::before {
+      background: #ef4444;
+    }
+
+    .error {
+      color: #e53e3e;
+      margin-top: 25px;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #fed7d7, #feb2b2);
+      border-radius: 14px;
+      border-left: 4px solid #e53e3e;
+      animation: slideUp 0.4s ease-out;
+      text-align: left;
+      display: none;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(229, 62, 62, 0.2);
+    }
+
+    .error.show {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .error::before {
+      content: '\f071';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #64748b;
+      font-style: italic;
+      padding: 40px;
+      font-size: 16px;
+    }
+
+    /* Enhanced Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .tracker-container {
+        padding: 35px 25px;
+        max-width: 100%;
+      }
+
+      h2 {
+        font-size: 28px;
+      }
+
+      .header-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+      }
+
+      input[type="text"] {
+        padding: 18px 20px 18px 48px;
+        font-size: 15px;
+      }
+
+      button {
+        padding: 18px 35px;
+        width: 100%;
+        font-size: 15px;
+      }
+
+      .report-info {
+        padding: 25px 20px;
+      }
+
+      .info-item {
+        padding: 16px 18px;
+      }
+
+      .info-item strong {
+        min-width: auto;
+        display: block;
+        margin-bottom: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tracker-container {
+        padding: 30px 20px;
+        border-radius: 20px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      .header-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+      }
+
+      .subtitle {
+        font-size: 15px;
+      }
+
+      input[type="text"] {
+        padding: 16px 18px 16px 45px;
+      }
+
+      button {
+        padding: 16px 30px;
+      }
+
+      .report-info h3 {
+        font-size: 20px;
+      }
+    }
+
+    /* Loading animation for better UX */
+    .searching {
+      position: relative;
+    }
+
+    .searching::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+      animation: searchSweep 1.5s ease-in-out infinite;
+    }
+
+    @keyframes searchSweep {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+  </style>
+</head>
+<body>
+<div class="tracker-container">
+  <div class="header-section">
+    <div class="header-icon">🔍</div>
+    <h2>Track Your Report</h2>
+    <p class="subtitle">Enter your report ID below to check the current status and details</p>
+  </div>
+  
+  <div class="search-section">
+    <div class="input-group">
+      <input type="text" id="reportId" placeholder="Enter your Report ID (e.g., 12345)">
+    </div>
+    
+    <button id="trackBtn">
+      <span class="btn-text">Track Report</span>
+    </button>
+  </div>
+  
+  <div class="report-info" id="reportInfo" style="display: none;"></div>
+  <div class="error" id="errorMsg"></div>
+</div>
+
+<script>
+  // 1️⃣ Initialize Supabase with your credentials
+  const supabaseUrl = "https://tpcpjxiafgptviandelc.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwY3BqeGlhZmdwdHZpYW5kZWxjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxNjk4NDcsImV4cCI6MjA3Mjc0NTg0N30.TYcP-D68eufxqnNgjsdMpkt0xoekP-whJZ9mkDgLAdM";
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+  // Helper function to get status badge HTML
+  function getStatusBadge(status) {
+    const statusMap = {
+    "Pending": "Work Under Process",
+    "In Progress": "In Progress",
+    "Completed": "Completed",
+    "Rejected": "Rejected"
+  };
+
+  // Map database status to CSS class (must match your existing CSS)
+  const classMap = {
+    "Pending": "pending",
+    "In Progress": "in-progress",
+    "Completed": "completed",
+    "Rejected": "rejected"
+  };
+
+  const displayStatus = statusMap[status] || status;
+    const statusClass = classMap[status] || status.toLowerCase().replace(/\s+/g, '-');
+
+  return `<span class="status-badge status-${statusClass}">${displayStatus}</span>`;
+  }
+
+  // 2️⃣ Track Report Button Click
+document.getElementById('trackBtn').addEventListener('click', async () => {
+  const reportId = document.getElementById('reportId').value.trim();
+  const reportInfo = document.getElementById('reportInfo');
+  const errorMsg = document.getElementById('errorMsg');
+  const trackBtn = document.getElementById('trackBtn');
+
+  reportInfo.style.display = 'none';
+  reportInfo.innerHTML = '';
+  errorMsg.innerText = '';
+  errorMsg.classList.remove('show');
+
+  if (!reportId) {
+    errorMsg.innerText = 'Please enter a valid Report ID';
+    errorMsg.classList.add('show');
+    return;
+  }
+
+  // Show loading state
+  trackBtn.disabled = true;
+  trackBtn.innerHTML = '<span class="loading"></span>Searching...';
+
+  try {
+    const idValue = isNaN(reportId) ? reportId : parseInt(reportId);
+
+    // Fetch report
+    const { data: reportData, error: reportError } = await supabaseClient
+      .from('reports')
+      .select('id, name, email, location, description, status, category')
+      .eq('id', idValue)
+      .single();
+
+    if (reportError || !reportData) throw new Error('Report not found');
+
+    // Fetch report images
+    const { data: imagesData, error: imagesError } = await supabaseClient
+      .from('report_images')
+      .select('image_url')
+      .eq('report_id', idValue);
+
+    if (imagesError) throw new Error('Failed to fetch report images');
+
+    // Build images HTML
+    let imagesHtml = '';
+    if (imagesData && imagesData.length > 0) {
+      imagesHtml = '<div class="info-item"><strong>Images:</strong> <span>';
+      imagesData.forEach(img => {
+        imagesHtml += `<img src="${img.image_url}" alt="Report Image" style="max-width:100px; margin:5px; border-radius:8px;">`;
+      });
+      imagesHtml += '</span></div>';
+    }
+
+    // Display report details including images
+    reportInfo.innerHTML = `
+      <h3>📋 Report Details</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <strong>ID:</strong> <span>#${reportData.id}</span>
+        </div>
+        <div class="info-item">
+          <strong>Name:</strong> <span>${reportData.name}</span>
+        </div>
+        <div class="info-item">
+          <strong>Email:</strong> <span>${reportData.email}</span>
+        </div>
+        <div class="info-item">
+          <strong>Location:</strong> <span>${reportData.location}</span>
+        </div>
+        <div class="info-item">
+          <strong>Category:</strong> <span>${reportData.category}</span>
+        </div>
+        <div class="info-item">
+          <strong>Status:</strong> ${getStatusBadge(reportData.status)}
+        </div>
+        <div class="info-item">
+          <strong>Description:</strong> <span>${reportData.description}</span>
+        </div>
+        ${imagesHtml}
+      </div>
+    `;
+    reportInfo.style.display = 'block';
+
+  } catch (err) {
+    console.error(err);
+    errorMsg.innerText = 'Report not found or invalid ID. Please check your Report ID and try again.';
+    errorMsg.classList.add('show');
+  } finally {
+    trackBtn.disabled = false;
+    trackBtn.innerHTML = '<span class="btn-text">Track Report</span>';
+  }
+});
+
+</script>
+</body>
+
+</html>
+
